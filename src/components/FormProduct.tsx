@@ -34,13 +34,13 @@ export const FormProduct = ({
   const [id, setId] = useState('');
   const {isAvailable, error} = useVerifyId(id);
 
-  const getErrorText = (error: any) => {
-    if (typeof error === 'string') {
-      return error;
-    } else if (Array.isArray(error)) {
-      return error.join(', ');
-    } else if (typeof error === 'object') {
-      return JSON.stringify(error);
+  const getErrorText = (errorT: any) => {
+    if (typeof errorT === 'string') {
+      return errorT;
+    } else if (Array.isArray(errorT)) {
+      return errorT.join(', ');
+    } else if (typeof errorT === 'object') {
+      return JSON.stringify(errorT);
     }
     return '';
   };
@@ -241,17 +241,15 @@ export const FormProduct = ({
               style={[styles.resetButton, {backgroundColor: colors.border}]}
               onPress={() => {
                 submitButtonText === 'Actualizar'
-                  ? () => {
-                      setValues({
-                        id: values.id,
-                        name: '',
-                        description: '',
-                        logo: '',
-                        date_release: '',
-                        date_revision: '',
-                      });
-                    }
-                  : () => resetForm();
+                  ? setValues({
+                      id: values.id,
+                      name: '',
+                      description: '',
+                      logo: '',
+                      date_release: '',
+                      date_revision: '',
+                    })
+                  : resetForm();
               }}>
               <Text style={[styles.resetButtonText, {color: colors.text}]}>
                 Reiniciar
