@@ -1,8 +1,9 @@
 import * as Yup from 'yup';
-const dateRegExp = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/;
+
+const dateRegExp = /^\d{4}-\d{2}-\d{2}$/;
 
 const parseDate = (dateString: string) => {
-  const [day, month, year] = dateString.split('/');
+  const [year, month, day] = dateString.split('-');
   return new Date(`${year}-${month}-${day}`);
 };
 
@@ -21,7 +22,7 @@ export const validationSchema = Yup.object().shape({
     .required('Descripción es requerida'),
   logo: Yup.string().required('Logo es requerido'),
   date_release: Yup.string()
-    .matches(dateRegExp, 'Fecha de liberación debe estar en formato dd/mm/yyyy')
+    .matches(dateRegExp, 'Fecha de liberación debe estar en formato yyyy-mm-dd')
     .required('Fecha de liberación es requerida')
     .test('is-valid-date', 'Fecha de liberación no es válida', value => {
       const date = parseDate(value);
@@ -29,15 +30,15 @@ export const validationSchema = Yup.object().shape({
     })
     .test(
       'is-after-today',
-      'Fecha de revisión debe ser después de la fecha actual',
+      'Fecha de liberación debe ser después de la fecha actual',
       value => {
         const today = new Date();
-        const revisionDate = parseDate(value);
-        return revisionDate > today;
+        const releaseDate = parseDate(value);
+        return releaseDate > today;
       },
     ),
   date_revision: Yup.string()
-    .matches(dateRegExp, 'Fecha de revisión debe estar en formato dd/mm/yyyy')
+    .matches(dateRegExp, 'Fecha de revisión debe estar en formato yyyy-mm-dd')
     .required('Fecha de revisión es requerida')
     .test('is-valid-date', 'Fecha de revisión no es válida', value => {
       const date = parseDate(value);

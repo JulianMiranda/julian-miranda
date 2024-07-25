@@ -4,10 +4,12 @@ import {HomeScreen} from '../screens/HomeScreen';
 import {DetailsScreen} from '../screens/DetailsScreen';
 import {Product} from '../interfaces/Product.interface';
 import {CreateScreen} from '../screens/CreateScreen';
+import {EditScreen} from '../screens/EditScreenn';
 
 export type RootStackParams = {
   HomeScreen: undefined;
   DetailsScreen: {item: Product};
+  EditScreen: {item: Product};
   CreateScreen: undefined;
 };
 const Stack = createStackNavigator<RootStackParams>();
@@ -28,6 +30,11 @@ export const StackNavigator = () => {
       <Stack.Screen
         name="CreateScreen"
         component={CreateScreen}
+        options={{title: 'Banco'}}
+      />
+      <Stack.Screen
+        name="EditScreen"
+        component={EditScreen}
         options={{title: 'Banco'}}
       />
     </Stack.Navigator>

@@ -12,20 +12,21 @@ import {
 import {Formik} from 'formik';
 import {validationSchema} from '../utils/validationSchema';
 import {ThemeContext} from '../context/theme/ThemeContext';
-import {useVerifyId} from '../hooks/useVerifyId';
 import axios from '../api/axios';
 import {addOneYearToDate} from '../utils/addOneYear';
-import {convertToISODate} from '../utils/convertToISODate';
+import {StackScreenProps} from '@react-navigation/stack';
+import {RootStackParams} from '../routes/StackNavigator';
+import {formatDate} from '../utils/formatDate';
 
-export const CreateScreen = ({navigation}: any) => {
+type Props = StackScreenProps<RootStackParams, 'EditScreen'>;
+
+export const EditScreen = ({route, navigation}: Props) => {
+  const {item} = route.params;
   const {
     theme: {colors},
   } = useContext(ThemeContext);
-  const [id, setId] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-
-  const {isAvailable, error} = useVerifyId(id);
 
   useEffect(() => {
     if (submitError) {
@@ -40,21 +41,22 @@ export const CreateScreen = ({navigation}: any) => {
   const handleFormSubmit = (values: any) => {
     setIsSubmitting(true);
     setSubmitError(null);
-    console.log(values);
 
     try {
       axios
-        .post('/bp/products', values)
-        .then(() => {
+        .put(`/bp/products?id=${item.id}`, values)
+        .then(response => {
+          console.log(response);
           navigation.navigate('HomeScreen');
         })
         .catch(err => {
           console.log('Error catch', err);
-          setSubmitError('Error al crear el producto. Inténtalo de nuevo.');
+          setSubmitError(
+            'Error al actualizar el producto. Inténtalo de nuevo.',
+          );
         });
     } catch (errorCatch) {
-      console.log('Error try catch');
-      setSubmitError('Error al crear el producto. Inténtalo de nuevo.');
+      setSubmitError('Error al actualizar el producto. Inténtalo de nuevo.');
     } finally {
       setIsSubmitting(false);
     }
@@ -65,15 +67,15 @@ export const CreateScreen = ({navigation}: any) => {
       style={[styles.container, {backgroundColor: colors.background}]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.header}>Formulario de Registro</Text>
+        <Text style={styles.header}>Editar Producto</Text>
         <Formik
           initialValues={{
-            id: '',
-            name: '',
-            description: '',
-            logo: '',
-            date_release: '',
-            date_revision: '',
+            id: item.id,
+            name: item.name,
+            description: item.description,
+            logo: item.logo,
+            date_release: formatDate(item.date_release),
+            date_revision: formatDate(item.date_revision),
           }}
           validationSchema={validationSchema}
           onSubmit={handleFormSubmit}>
@@ -85,7 +87,7 @@ export const CreateScreen = ({navigation}: any) => {
             errors,
             touched,
             setFieldValue,
-            resetForm,
+            setValues,
           }) => (
             <>
               <View style={styles.formContainer}>
@@ -94,28 +96,15 @@ export const CreateScreen = ({navigation}: any) => {
                   <TextInput
                     style={[
                       styles.input,
-                      touched.id &&
-                      (errors.id || error || isAvailable === false)
-                        ? styles.errorInput
-                        : null,
+                      {backgroundColor: colors.card, color: '#ccc'},
+                      touched.id && errors.id ? styles.errorInput : null,
                     ]}
                     placeholder="ID"
-                    autoCapitalize="none"
-                    onChangeText={text => {
-                      handleChange('id')(text);
-                      setId(text);
-                    }}
-                    onBlur={handleBlur('id')}
                     value={values.id}
+                    editable={false}
                   />
                   {touched.id && errors.id && (
                     <Text style={styles.errorText}>{errors.id}</Text>
-                  )}
-                  {touched.id && error && (
-                    <Text style={styles.errorText}>{error}</Text>
-                  )}
-                  {touched.id && isAvailable === false && (
-                    <Text style={styles.errorText}>ID ya existe</Text>
                   )}
                 </View>
                 <View style={styles.inputContainer}>
@@ -225,13 +214,22 @@ export const CreateScreen = ({navigation}: any) => {
                     {backgroundColor: colors.primary},
                   ]}
                   onPress={() => handleFormikSubmit()}>
-                  <Text style={styles.submitButtonText}>Enviar</Text>
+                  <Text style={styles.submitButtonText}>Actualizar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.8}
                   disabled={isSubmitting}
                   style={[styles.resetButton, {backgroundColor: colors.border}]}
-                  onPress={() => resetForm()}>
+                  onPress={() => {
+                    setValues({
+                      id: values.id,
+                      name: '',
+                      description: '',
+                      logo: '',
+                      date_release: '',
+                      date_revision: '',
+                    });
+                  }}>
                   <Text style={[styles.resetButtonText, {color: colors.text}]}>
                     Reiniciar
                   </Text>

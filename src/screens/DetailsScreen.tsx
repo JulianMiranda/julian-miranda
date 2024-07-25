@@ -14,10 +14,12 @@ import {Product} from '../interfaces/Product.interface';
 import SkeletonDetails from '../skeletors/DetailsSkeleton';
 import {ThemeContext} from '../context/theme/ThemeContext';
 import {formatDate} from '../utils/formatDate';
+import {DeleteModal} from '../components/Modal';
+import axios from '../api/axios';
 
 type Props = StackScreenProps<RootStackParams, 'DetailsScreen'>;
 
-export const DetailsScreen = ({route}: Props) => {
+export const DetailsScreen = ({route, navigation}: Props) => {
   const {item} = route.params;
   const {bottom} = useSafeAreaInsets();
   const {
@@ -25,6 +27,10 @@ export const DetailsScreen = ({route}: Props) => {
   } = useContext(ThemeContext);
   const [isLoading, setIsLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [product, setProduct] = useState<Product>({
     id: '',
     name: '',
@@ -39,12 +45,48 @@ export const DetailsScreen = ({route}: Props) => {
     setIsLoading(false);
   }, [item]);
 
+  useEffect(() => {
+    if (deleteError) {
+      const timer = setTimeout(() => {
+        setDeleteError(null);
+      }, 1500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [deleteError]);
+
+  const handleDelete = () => {
+    setIsModalVisible(true);
+  };
+
+  const confirmDelete = async () => {
+    setIsProcessing(true);
+    try {
+      await axios.delete(`/bp/products?id=${product.id}`);
+      navigation.navigate('HomeScreen');
+    } catch (error) {
+      setDeleteError('Error al eliminar el producto. Inténtalo de nuevo.');
+    } finally {
+      setIsProcessing(false);
+      setIsModalVisible(false);
+    }
+  };
+
+  const cancelDelete = () => {
+    setIsModalVisible(false);
+  };
+
   if (isLoading) {
     return <SkeletonDetails />;
   }
 
   return (
     <>
+      {deleteError && (
+        <View style={styles.deleteErrorContainer}>
+          <Text style={styles.deleteErrorText}>{deleteError}</Text>
+        </View>
+      )}
       <ScrollView style={styles.container}>
         <Text style={styles.header}>ID: {product.id}</Text>
         <Text style={styles.subHeader}>Información extra</Text>
@@ -80,15 +122,28 @@ export const DetailsScreen = ({route}: Props) => {
         <View style={{...styles.spaceButton, height: bottom + 150}} />
       </ScrollView>
       <View style={{...styles.containerButton, marginBottom: bottom + 15}}>
-        <TouchableOpacity style={styles.editButton} onPress={() => {}}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.editButton}
+          onPress={() => navigation.navigate('EditScreen', {item})}>
           <Text style={{...styles.editButtonText, color: colors.text}}>
             Editar
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.deleteButton} onPress={() => {}}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.deleteButton}
+          onPress={handleDelete}>
           <Text style={styles.deleteButtonText}>Eliminar</Text>
         </TouchableOpacity>
       </View>
+      <DeleteModal
+        visible={isModalVisible}
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+        productName={product.name}
+        isProcessing={isProcessing}
+      />
     </>
   );
 };
@@ -162,5 +217,24 @@ const styles = StyleSheet.create({
   },
   spaceButton: {
     backgroundColor: '#fff',
+  },
+  deleteErrorContainer: {
+    position: 'absolute',
+    top: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.95)',
+    flex: 1,
+    width: '90%',
+    alignSelf: 'center',
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+    borderRadius: 8,
+    zIndex: 999,
+  },
+  deleteErrorText: {
+    color: '#ff0000',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+    zIndex: 99,
   },
 });
