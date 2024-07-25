@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
   },
   modalTitleContainer: {
     paddingVertical: 25,
+    paddingHorizontal: 25,
     borderTopColor: '#f3f3f3',
     borderBottomColor: '#f3f3f3',
     borderTopWidth: 1,
@@ -104,7 +105,6 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
     textAlign: 'center',
   },
   modalButtons: {
@@ -126,6 +126,5 @@ const styles = StyleSheet.create({
 
   modalButtonText: {
     fontSize: 16,
-    fontWeight: 'bold',
   },
 });

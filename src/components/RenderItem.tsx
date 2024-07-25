@@ -65,11 +65,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   itemTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '500',
   },
   itemSubtitle: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#666',
   },
   navigateIcon: {

@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 4,
-    fontSize: 16,
+    fontSize: 14,
     color: '#000',
   },
   inputContainer: {
@@ -276,6 +276,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
     paddingHorizontal: 8,
+    fontSize: 14,
   },
   errorInput: {
     borderColor: '#ff0000',
@@ -283,6 +284,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: '#ff0000',
     marginTop: 4,
+    fontSize: 12,
   },
   submitErrorContainer: {
     position: 'absolute',

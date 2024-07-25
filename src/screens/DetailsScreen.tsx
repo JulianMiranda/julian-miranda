@@ -169,16 +169,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
+    paddingHorizontal: 16,
   },
   logoContainer: {
     marginBottom: 20,
+    paddingHorizontal: 16,
   },
   label: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '400',
+    color: '#666',
   },
   value: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '700',
     maxWidth: '60%',
     textAlign: 'right',
