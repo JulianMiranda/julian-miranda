@@ -9,6 +9,7 @@ import {
 import {ThemeContext} from '../context/theme/ThemeContext';
 import {FormProduct} from '../components/FormProduct';
 import axios from '../api/axios';
+import axiosOrig from 'axios';
 import {formatDate} from '../utils/formatDate';
 import {RootStackParams} from '../routes/StackNavigator';
 import {StackScreenProps} from '@react-navigation/stack';
@@ -39,7 +40,21 @@ export const EditScreen = ({route, navigation}: Props) => {
       await axios.put(`/bp/products?id=${item.id}`, values);
       navigation.navigate('HomeScreen');
     } catch (err) {
-      setSubmitError('Error al actualizar el producto. Inténtalo de nuevo.');
+      if (axiosOrig.isAxiosError(err)) {
+        if (err.response?.status === 400) {
+          setSubmitError(
+            'Error: El encabezado `authorId` falta en la solicitud.',
+          );
+        } else if (err.response?.status === 206) {
+          setSubmitError(
+            'Error: Faltan propiedades requeridas en la solicitud.',
+          );
+        } else {
+          setSubmitError('Error al crear el producto. Inténtalo de nuevo.');
+        }
+      } else {
+        setSubmitError('Error al crear el producto. Inténtalo de nuevo.');
+      }
     } finally {
       setIsSubmitting(false);
     }

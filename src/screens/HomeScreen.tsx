@@ -16,6 +16,7 @@ import {Product} from '../interfaces/Product.interface';
 import ProductItem from '../components/RenderItem';
 import {ThemeContext} from '../context/theme/ThemeContext';
 import {useFocusEffect} from '@react-navigation/native';
+import axiosOrig from 'axios';
 
 type Props = StackScreenProps<RootStackParams, 'HomeScreen'>;
 
@@ -26,6 +27,7 @@ export const HomeScreen = ({navigation}: Props) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const {bottom} = useSafeAreaInsets();
 
   useEffect(() => {
@@ -36,6 +38,15 @@ export const HomeScreen = ({navigation}: Props) => {
       fetchProducts();
     }, []),
   );
+  useEffect(() => {
+    if (loadError) {
+      const timer = setTimeout(() => {
+        setLoadError(null);
+      }, 1500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [loadError]);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -46,10 +57,20 @@ export const HomeScreen = ({navigation}: Props) => {
           setProducts(response.data);
         })
         .catch(error => {
-          console.log('Error catch', error);
+          if (axiosOrig.isAxiosError(error)) {
+            if (error.response?.status === 400) {
+              setLoadError(
+                'Error: El encabezado `authorId` falta en la solicitud.',
+              );
+            } else {
+              setLoadError('Error al cargar');
+            }
+          } else {
+            setLoadError('Error al cargar');
+          }
         });
     } catch (error) {
-      console.error('Error try catch', error);
+      setLoadError('Error al cargar');
     } finally {
       setLoading(false);
     }
@@ -71,6 +92,11 @@ export const HomeScreen = ({navigation}: Props) => {
   );
   return (
     <View style={styles.container}>
+      {loadError && (
+        <View style={styles.loadErrorContainer}>
+          <Text style={styles.loadErrorText}>{loadError}</Text>
+        </View>
+      )}
       <TextInput
         style={styles.searchInput}
         placeholder="Search..."
@@ -152,5 +178,24 @@ const styles = StyleSheet.create({
     width: '80%',
     height: 20,
     borderRadius: 4,
+  },
+  loadErrorContainer: {
+    position: 'absolute',
+    top: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.95)',
+    flex: 1,
+    width: '100%',
+    alignSelf: 'center',
+    paddingVertical: 5,
+    paddingHorizontal: 3,
+    borderRadius: 8,
+    zIndex: 999999,
+  },
+  loadErrorText: {
+    color: '#ff0000',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+    zIndex: 99,
   },
 });
