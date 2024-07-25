@@ -1,5 +1,5 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, StackHeaderProps} from '@react-navigation/stack';
 import {HomeScreen} from '../screens/HomeScreen';
 import {DetailsScreen} from '../screens/DetailsScreen';
 import {Product} from '../interfaces/Product.interface';
@@ -16,34 +16,35 @@ export type RootStackParams = {
 const Stack = createStackNavigator<RootStackParams>();
 
 export const StackNavigator = () => {
+  const renderHeader = (props: StackHeaderProps) => <Header {...props} />;
   return (
     <Stack.Navigator initialRouteName="HomeScreen">
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
         options={{
-          header: props => <Header {...props} />,
+          header: renderHeader,
         }}
       />
       <Stack.Screen
         name="DetailsScreen"
         component={DetailsScreen}
         options={{
-          header: props => <Header {...props} />,
+          header: renderHeader,
         }}
       />
       <Stack.Screen
         name="CreateScreen"
         component={CreateScreen}
         options={{
-          header: props => <Header {...props} />,
+          header: renderHeader,
         }}
       />
       <Stack.Screen
         name="EditScreen"
         component={EditScreen}
         options={{
-          header: props => <Header {...props} />,
+          header: renderHeader,
         }}
       />
     </Stack.Navigator>
