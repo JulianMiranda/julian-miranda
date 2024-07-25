@@ -5,6 +5,7 @@ import {DetailsScreen} from '../screens/DetailsScreen';
 import {Product} from '../interfaces/Product.interface';
 import {CreateScreen} from '../screens/CreateScreen';
 import {EditScreen} from '../screens/EditScreenn';
+import {Header} from '../components/Header';
 
 export type RootStackParams = {
   HomeScreen: undefined;
@@ -20,22 +21,30 @@ export const StackNavigator = () => {
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
-        options={{title: 'Banco'}}
+        options={{
+          header: props => <Header {...props} />,
+        }}
       />
       <Stack.Screen
         name="DetailsScreen"
         component={DetailsScreen}
-        options={{title: 'Banco'}}
+        options={{
+          header: props => <Header {...props} />,
+        }}
       />
       <Stack.Screen
         name="CreateScreen"
         component={CreateScreen}
-        options={{title: 'Banco'}}
+        options={{
+          header: props => <Header {...props} />,
+        }}
       />
       <Stack.Screen
         name="EditScreen"
         component={EditScreen}
-        options={{title: 'Banco'}}
+        options={{
+          header: props => <Header {...props} />,
+        }}
       />
     </Stack.Navigator>
   );

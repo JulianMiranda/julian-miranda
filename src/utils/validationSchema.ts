@@ -4,7 +4,17 @@ const dateRegExp = /^\d{4}-\d{2}-\d{2}$/;
 
 const parseDate = (dateString: string) => {
   const [year, month, day] = dateString.split('-');
-  return new Date(`${year}-${month}-${day}`);
+  const date = new Date(`${year}-${month}-${day}T00:00:00Z`);
+  return date;
+};
+
+const isValidDate = (dateString: string) => {
+  const [year, month, day] = dateString.split('-').map(Number);
+  if (year < 1900 || month < 1 || month > 12 || day < 1 || day > 31) {
+    return false;
+  } else {
+    return true;
+  }
 };
 
 export const validationSchema = Yup.object().shape({
@@ -25,8 +35,7 @@ export const validationSchema = Yup.object().shape({
     .matches(dateRegExp, 'Fecha de liberación debe estar en formato yyyy-mm-dd')
     .required('Fecha de liberación es requerida')
     .test('is-valid-date', 'Fecha de liberación no es válida', value => {
-      const date = parseDate(value);
-      return date instanceof Date && !isNaN(date.getTime());
+      return isValidDate(value);
     })
     .test(
       'is-after-today',
@@ -41,8 +50,7 @@ export const validationSchema = Yup.object().shape({
     .matches(dateRegExp, 'Fecha de revisión debe estar en formato yyyy-mm-dd')
     .required('Fecha de revisión es requerida')
     .test('is-valid-date', 'Fecha de revisión no es válida', value => {
-      const date = parseDate(value);
-      return date instanceof Date && !isNaN(date.getTime());
+      return isValidDate(value);
     })
     .test(
       'is-after-release',
