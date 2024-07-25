@@ -4,7 +4,7 @@ import {HomeScreen} from '../screens/HomeScreen';
 import {DetailsScreen} from '../screens/DetailsScreen';
 import {Product} from '../interfaces/Product.interface';
 import {CreateScreen} from '../screens/CreateScreen';
-import {EditScreen} from '../screens/EditScreenn';
+import {EditScreen} from '../screens/EditScreen';
 import {Header} from '../components/Header';
 
 export type RootStackParams = {

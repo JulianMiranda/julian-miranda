@@ -24,22 +24,3 @@ export const darkTheme = {
     card: '#333333',
   },
 };
-/*
---primary-color: #fcdd00;
-	--secondary-color: #fcf2ae;
-	--accent-color: #edeff4;
-	--text-color: #54648e;
-	--error-color: #dc3545;
-	--success-color: #28a745;
-	--white-color: #fff;
-	--black-color: #000;
-	--border-color: #ddd;
-	--table-head-color: #fafbfc;
-	--table-line-color: #f3f3f3;
-	--text-input-color: #626262;
-	--icon-background-color: #a1a2a6;
-	--image-background-color: #cacfdc;
-	--input-background-color: rgba(237, 239, 244, 0.6);
-	--shadow-color: rgba(98, 98, 98, 0.6);
-	--white-shadow-color: rgba(255, 255, 255, 0.9);
-	--modal-backdrop-color: rgba(0, 0, 0, 0.7);*/

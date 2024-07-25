@@ -48,6 +48,7 @@ export const DeleteModal = ({
           </ScrollView>
           <View style={styles.modalButtons}>
             <TouchableOpacity
+              testID="confirm-button"
               style={[styles.modalButton, styles.confirmButton]}
               onPress={onConfirm}
               disabled={isProcessing}
@@ -55,6 +56,7 @@ export const DeleteModal = ({
               <Text style={styles.modalButtonText}>Confirmar</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              testID="cancel-button"
               disabled={isProcessing}
               activeOpacity={0.8}
               style={[styles.modalButton, {backgroundColor: colors.border}]}

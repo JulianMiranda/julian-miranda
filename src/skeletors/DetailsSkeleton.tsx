@@ -6,28 +6,28 @@ const SkeletonDetails = () => {
   return (
     <SkeletonPlaceholder>
       <View style={styles.container}>
-        <View style={styles.header} />
-        <View style={styles.subHeader} />
+        <View style={styles.header} testID="skeleton-element" />
+        <View style={styles.subHeader} testID="skeleton-element" />
 
         <View style={styles.infoContainer}>
-          <View style={styles.label} />
-          <View style={styles.value} />
+          <View style={styles.label} testID="skeleton-element" />
+          <View style={styles.value} testID="skeleton-element" />
         </View>
         <View style={styles.infoContainer}>
-          <View style={styles.label} />
-          <View style={styles.value} />
+          <View style={styles.label} testID="skeleton-element" />
+          <View style={styles.value} testID="skeleton-element" />
         </View>
         <View style={styles.logoContainer}>
           <View style={styles.label} />
           <View style={styles.logo} />
         </View>
         <View style={styles.infoContainer}>
-          <View style={styles.label} />
-          <View style={styles.value} />
+          <View style={styles.label} testID="skeleton-element" />
+          <View style={styles.value} testID="skeleton-element" />
         </View>
         <View style={styles.infoContainer}>
-          <View style={styles.label} />
-          <View style={styles.value} />
+          <View style={styles.label} testID="skeleton-element" />
+          <View style={styles.value} testID="skeleton-element" />
         </View>
       </View>
     </SkeletonPlaceholder>

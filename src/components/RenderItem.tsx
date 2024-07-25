@@ -20,6 +20,7 @@ const ProductItem = ({item, index, length, onPress}: Props) => {
   return (
     <>
       <TouchableOpacity
+        testID={`product-item-${index}`}
         activeOpacity={0.8}
         style={itemStyles}
         onPress={() => onPress(item)}>
