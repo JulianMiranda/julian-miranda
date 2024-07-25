@@ -1,20 +1,21 @@
-import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
+import {StackScreenProps} from '@react-navigation/stack';
+import {RootStackParams} from '../routes/StackNavigator';
 
-export const Details = () => {
-  const navigation = useNavigation<any>();
-  const onPress = () => {
-    navigation.navigate('Home');
-  };
+type Props = StackScreenProps<RootStackParams, 'Details'>;
+
+export const Details = ({route}: Props) => {
+  const {itemId, otherParam} = route.params;
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPress}>
-        <Text>Go Home</Text>
-      </TouchableOpacity>
+      <Text>Item ID: {itemId}</Text>
+      <Text>Other Param: {otherParam}</Text>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
